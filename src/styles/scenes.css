@@ -1,0 +1,138 @@
+/* Scenes 02–09. --u scales layered artwork with the viewport (1vw desktop, larger on phones). */
+.scene {
+  --u: 1vw;
+  position: relative;
+  padding: clamp(72px, 9vw, 128px) 24px;
+  text-align: center;
+}
+.scene img { display: block; user-select: none; }
+.scene h2 {
+  font-style: italic; font-weight: 300;
+  font-size: clamp(2rem, 4.4vw, 3.2rem); line-height: 1.1;
+  color: var(--royal-blue); margin: 0.4rem 0;
+}
+.scene h2 span { color: var(--gold); }
+.scene h3 { font-style: italic; font-size: 1.7rem; color: var(--royal-blue); }
+.scene p { line-height: 1.7; margin: 0.4rem auto; max-width: 60ch; }
+.divider { width: min(320px, 70%); height: auto; margin: 1rem auto; }
+/* Moving layers get their own compositor layer so scrolling never repaints the big artwork. */
+[data-depth], [data-float], [data-drift], [data-seal] { will-change: transform; }
+
+
+/* Shared water band */
+.water { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--u) * 24); pointer-events: none; }
+.water__img { position: absolute; bottom: 0; left: calc(var(--u) * -3); width: calc(var(--u) * 106); max-width: none; height: auto; }
+.water__lotus { position: absolute; bottom: 18%; width: min(140px, calc(var(--u) * 9)); height: auto; }
+
+/* 02 Invitation */
+.invitation { padding-top: clamp(120px, 12vw, 170px); }
+.invitation__card {
+  position: relative; max-width: 620px; margin: 0 auto;
+  padding: clamp(72px, 9vw, 96px) clamp(24px, 6vw, 72px) clamp(40px, 6vw, 64px);
+  background: var(--cream) url("/assets/wedding/textures/paper-card.webp") repeat;
+  background-size: 512px;
+  border: 1px solid rgb(181 154 104 / 0.45);
+}
+.invitation__seal { position: absolute; top: -60px; left: calc(50% - 60px); width: 120px; height: auto; } /* no CSS transform: GSAP owns it */
+.invitation__blessing { color: var(--gold); font-size: 1.1rem; }
+.invitation__families { font-family: var(--font-display); font-style: italic; font-size: 1.15rem; }
+.invitation__when { color: var(--royal-blue); font-weight: 600; margin-top: 1rem; }
+
+/* 03 Palace: absolutely stacked layers, far to near */
+.palace { padding: 0; overflow: hidden; min-height: max(100svh, calc(var(--u) * 52 + 220px)); }
+.palace > * { position: absolute; }
+.palace__sky { left: 0; top: -80px; width: 100%; height: calc(100% + 160px); object-fit: cover; }
+.palace__title { top: clamp(56px, 8vw, 110px); left: 0; right: 0; padding: 0 24px; }
+.palace__hills { left: 0; width: 100%; height: auto; bottom: calc(var(--u) * 17); }
+.palace__layer { left: 0; right: 0; }
+.palace__chhatris { bottom: calc(var(--u) * 21); height: 0; }
+.palace__chhatri { position: absolute; bottom: 0; left: 7%; width: min(260px, calc(var(--u) * 17)); height: auto; }
+.palace__chhatri--right { left: auto; right: 7%; transform: scaleX(-1); }
+.palace__main { bottom: calc(var(--u) * 20); display: flex; justify-content: center; }
+.palace__main img { width: min(900px, calc(var(--u) * 64), 96vw); height: auto; }
+.palace__garden {
+  left: 0; right: 0; bottom: calc(var(--u) * 14); height: calc(var(--u) * 10); /* sits above the water's opaque band, covering the palace base */
+  background: url("/assets/wedding/palace/garden.png") repeat-x left bottom / auto 100%;
+}
+.palace__peacocks { bottom: calc(var(--u) * 7); height: 0; }
+.palace__peacock { position: absolute; bottom: 0; left: 3%; width: min(240px, calc(var(--u) * 16)); height: auto; }
+.palace__peacock--right { left: auto; right: 3%; transform: scaleX(-1); }
+
+/* 04 Story */
+.story { display: grid; place-items: center; min-height: 80svh; overflow: hidden; }
+.story__text { max-width: 640px; }
+.story__branch { position: absolute; top: 0; left: 0; width: min(340px, 24vw); height: auto; aspect-ratio: 768 / 1536; } /* 768x1536 file: max 384 CSS px */
+.story__branch--right { left: auto; right: 0; transform: scaleX(-1); }
+
+/* 05 Mandap */
+.mandap { overflow: hidden; padding-bottom: calc(var(--u) * 26); }
+.mandap__art { width: min(600px, 88vw); margin: 0 auto 2rem; }
+.mandap__art img { width: 100%; height: auto; aspect-ratio: 1; } /* reserve space: no layout shift while lazy images load */
+.mandap__text { max-width: 600px; margin: 0 auto; position: relative; z-index: 1; }
+.mandap__when { color: var(--royal-blue); font-weight: 600; }
+
+/* 06 Events */
+.events__grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px; max-width: 1100px; margin: 3rem auto 0;
+}
+.event { position: relative; }
+.event__card { display: block; width: 100%; height: auto; aspect-ratio: 900 / 1260; }
+.event__text { position: absolute; inset: 40% 9% 6%; display: flex; flex-direction: column; justify-content: center; }
+.event__text p { margin: 0.15rem auto; font-size: 0.92rem; }
+.event__dress { font-family: var(--font-display); font-style: italic; font-size: 1rem !important; }
+
+/* 07 Venue */
+.venue__frame {
+  max-width: 1000px; margin: 0 auto 2.5rem;
+  padding: clamp(10px, 1.6vw, 18px);
+  background: var(--cream); border: 1px solid rgb(181 154 104 / 0.5);
+}
+.venue__frame img { width: 100%; height: auto; aspect-ratio: 1672 / 941; }
+.venue__map { color: var(--royal-blue); text-underline-offset: 4px; text-decoration-color: var(--gold); }
+.venue__map:focus-visible { outline: 2px solid var(--royal-blue); outline-offset: 3px; }
+
+/* 08 RSVP */
+.rsvp__panel {
+  max-width: 560px; margin: 0 auto; text-align: left;
+  padding: clamp(32px, 6vw, 56px);
+  background: var(--cream) url("/assets/wedding/textures/paper-card.webp") repeat;
+  background-size: 512px;
+  border: 1px solid rgb(181 154 104 / 0.45);
+}
+.rsvp__head { text-align: center; }
+.rsvp form { display: grid; gap: 1.1rem; margin-top: 2rem; }
+.rsvp label, .rsvp legend {
+  display: grid; gap: 0.4rem;
+  font: 600 0.72rem/1.4 var(--font-ui); letter-spacing: 0.18em; text-transform: uppercase;
+}
+.rsvp input, .rsvp textarea {
+  font: 400 1rem var(--font-ui); color: var(--ink);
+  letter-spacing: normal; text-transform: none;
+  padding: 0.7rem 0.8rem; border: 1px solid rgb(120 148 177 / 0.6); border-radius: 4px;
+  background: rgb(245 240 231 / 0.8);
+}
+.rsvp input:focus-visible, .rsvp textarea:focus-visible { outline: 2px solid var(--royal-blue); outline-offset: 1px; }
+.rsvp fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
+.rsvp legend { margin-bottom: 0.4rem; }
+.rsvp .check { display: flex; align-items: center; gap: 0.6rem; font: 400 1rem var(--font-ui); letter-spacing: normal; text-transform: none; }
+.rsvp input[type="checkbox"] { width: 1.1rem; height: 1.1rem; accent-color: var(--royal-blue); }
+.rsvp button { justify-self: center; margin-top: 0.5rem; }
+.rsvp__status { text-align: center; font-size: 0.95rem; }
+
+/* 09 Closing */
+.closing { min-height: 100svh; display: grid; place-items: center; overflow: hidden; padding-bottom: calc(var(--u) * 28); }
+.closing__corner { position: absolute; top: 0; left: 0; width: clamp(160px, 24vw, 420px); height: auto; }
+.closing__corner--right { left: auto; right: 0; transform: scaleX(-1); }
+.closing__content { position: relative; z-index: 1; }
+.closing__monogram { width: 120px; margin: 0 auto 1rem; }
+.closing__from { font-family: var(--font-display); font-style: italic; font-size: 1.15rem; }
+.closing__palace { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; opacity: 0.22; }
+.closing__palace img { width: min(1000px, 92vw); height: auto; }
+
+/* Mobile (ART_DIRECTION): fewer side ornaments, artwork scaled up relative to the narrow screen. */
+@media (max-width: 700px) {
+  .scene { --u: 1.7vw; }
+  .palace__chhatris, .story__branch, .closing__corner--right { display: none; }
+  .events__grid { gap: 32px; }
+}

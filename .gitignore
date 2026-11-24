@@ -1,0 +1,16 @@
+node_modules
+dist
+
+# Local working folders, not part of the site:
+# raw generator downloads (approved originals are in assets-src/)
+generations/
+# screenshots taken during reviews
+review/
+# pre-change code snapshots (git history replaces these)
+backups/
+
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+*.tsbuildinfo

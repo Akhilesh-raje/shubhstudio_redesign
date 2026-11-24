@@ -1,0 +1,90 @@
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); /* column = viewport width, even when the mobile arch is wider */
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero img { display: block; user-select: none; }
+
+.hero__hills {
+  position: absolute; inset: auto 0 0 0;
+  width: 100%; height: auto;
+  opacity: 0.35; /* Scene 01 uses the hills faintly */
+  z-index: -3;
+}
+
+/* Max display 384x768 CSS px (manifest). Runs off the bottom edge. */
+.hero__pavilion {
+  position: absolute; bottom: 0;
+  height: min(768px, 88svh); width: auto;
+  z-index: -2;
+}
+.hero__pavilion--left { left: clamp(-60px, -2vw, 0px); }
+.hero__pavilion--right { right: clamp(-60px, -2vw, 0px); transform: scaleX(-1); }
+
+/* Floral corner: max display ~640 px wide (manifest). */
+.hero__corner {
+  position: absolute; top: 0;
+  width: clamp(184px, 27.5vw, 480px); height: auto; /* v1.1: ~8% smaller than v1 */
+  z-index: -1;
+}
+.hero__corner--left { left: 0; }
+.hero__corner--right { right: 0; transform: scaleX(-1); }
+
+/* Max display 600x666 CSS px (manifest); aspect 1200:1333. */
+.hero__stage {
+  position: relative;
+  width: min(600px, 88vw, calc(86svh * 1200 / 1333));
+  aspect-ratio: 1200 / 1333;
+}
+.hero__stage-inner { position: relative; } /* scroll-exit target; keeps .hero__card positioned over the arch */
+.hero__arch { width: 100%; height: auto; }
+
+.hero__card {
+  position: absolute;
+  inset: 17% 20% 9% 20%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: clamp(0.35rem, 1.2svh, 0.8rem);
+  text-align: center;
+}
+
+.hero__monogram { width: clamp(72px, 11svh, 112px); }
+.hero__monogram span { font-size: clamp(1.1rem, 2.6svh, 1.6rem); }
+
+.hero__invite { max-width: 34ch; line-height: 1.8; font-size: clamp(0.66rem, 1.6svh, 0.82rem); font-weight: 500; }
+
+.hero__names {
+  font-style: italic; font-weight: 300;
+  font-size: clamp(2rem, 6.2svh, 3.2rem); line-height: 1.05;
+  color: var(--royal-blue);
+}
+.hero__names span { color: var(--gold); font-weight: 300; }
+
+.hero__divider { width: 78%; height: auto; }
+
+.hero__date { font-weight: 600; color: var(--royal-blue); }
+.hero__place { margin: 0; font-family: var(--font-display); font-size: 1.1rem; font-style: italic; }
+
+.hero__cta { margin-top: 0.6rem; }
+
+/* Portrait screens (tablet, phone): no room for side pavilions beside a 600 px arch. */
+@media (max-aspect-ratio: 1/1) {
+  .hero .hero__pavilion { display: none; } /* .hero prefix: must out-rank ".hero img" */
+  .hero { padding-bottom: 8svh; } /* v1.1 review: lift the arch so it sits closer to the corners and clear of the hills */
+}
+
+/* Mobile (ART_DIRECTION + v1.1 review, option B): one restrained corner, arch oversized as a backdrop past both screen edges. */
+@media (max-width: 700px) {
+  .hero .hero__corner--right { display: none; }
+  .hero__corner--left { width: 44vw; }
+  .hero__stage { width: min(600px, 150vw); justify-self: start; left: 50%; transform: translateX(-50%); } /* wider than the viewport: grid would left-align it; 600 px cap still holds */
+  .hero__card { inset: 15% 21% 8% 21%; } /* = the arch opening, clear of the floral border */
+  .hero__invite { max-width: 26ch; }
+  .hero__names { white-space: nowrap; font-size: clamp(1.9rem, 9vw, 2.4rem); }
+  .hero__place { font-size: 1rem; }
+  .hero__cta { margin-top: 0.3rem; }
+}

@@ -1,0 +1,18 @@
+/* Locked design tokens: docs/ART_DIRECTION.md */
+:root {
+  --ivory: #f5f0e7;
+  --cream: #ede4d5;
+  --champagne: #e6d3b4;
+  --gold: #b59a68;
+  --powder: #d9e5ef;
+  --dusty-blue: #7894b1;
+  --royal-blue: #254a69;
+  --sage: #879482;
+  --green: #627a62;
+  --ink: #453b32;
+
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-ui: "Manrope", system-ui, sans-serif;
+
+  --asset: "/assets/wedding";
+}

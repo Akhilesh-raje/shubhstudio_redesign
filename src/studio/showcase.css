@@ -1,0 +1,103 @@
+/* Sample invitations gallery + opened gatefold dialog */
+.sc { position: relative; overflow: hidden; max-width: none; }
+.sc > .section__head, .sc__row { max-width: 1120px; margin-left: auto; margin-right: auto; }
+.sc__corner { position: absolute; top: 0; left: 0; width: clamp(140px, 17vw, 260px); opacity: 0.85; pointer-events: none; }
+.sc__corner--r { left: auto; right: 0; transform: scaleX(-1); }
+.sc__word { display: inline-block; }
+
+.sc__row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(28px, 4vw, 64px); align-items: end; }
+.sc__item { margin: 0; transition: opacity 0.6s, scale 0.6s; }
+.sc.is-open .sc__item { opacity: 0.25; scale: 0.97; }
+.sc__item--royal { translate: 0 -36px; }
+.sc__item--floral .sc__pose { rotate: -2.5deg; }
+.sc__item--minimal .sc__pose { rotate: 2.5deg; }
+
+.sc__open { all: unset; display: block; width: 100%; cursor: pointer; perspective: 1100px; }
+.sc__open:focus-visible { outline: 2px solid var(--royal-blue); outline-offset: 12px; }
+.sc__lift { position: relative; transform-style: preserve-3d; padding: 4% 16% 14% 2%; }
+
+/* envelope behind the card, offset down-right; flap is a darker triangle */
+.sc__env {
+  position: absolute; left: 18%; right: 0; top: 16%; bottom: 8%;
+  background: var(--env, #e6d3b4) url("/assets/wedding/textures/paper-card.webp") 0 0 / 256px; background-blend-mode: multiply;
+  box-shadow: 0 18px 30px -22px rgb(42 36 32 / 0.45);
+}
+.sc__env::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 46%; background: rgb(42 36 32 / 0.08); clip-path: polygon(0 0, 100% 0, 50% 100%); }
+.sc__env-mono { position: absolute; right: 9%; bottom: 7%; font: italic 400 clamp(1rem, 1.6vw, 1.4rem) var(--font-display); letter-spacing: 0.06em; color: var(--env-ink, var(--ink-d)); }
+.sc__item--royal { --env: #e6d3b4; --env-ink: #5e1a24; }
+.sc__item--floral { --env: #dfe6da; --env-ink: #66775f; }
+.sc__item--minimal { --env: #2a2420; --env-ink: #e9e2d6; }
+.sc__item--minimal .sc__env { background-blend-mode: normal; background-image: none; }
+.sc__item--minimal .sc__env::before { background: rgb(255 255 255 / 0.06); }
+
+.sc__card { position: relative; }
+.sc__card .invite { transition: filter 0.5s; }
+.sc__shadow {
+  position: absolute; left: 6%; right: 18%; bottom: 9%; height: 9%;
+  background: radial-gradient(ellipse at center, rgb(42 36 32 / 0.38), transparent 70%); filter: blur(10px);
+  transition: transform 0.6s, opacity 0.6s; pointer-events: none;
+}
+.sc__hint {
+  position: absolute; left: 41%; bottom: 0; translate: -50% 0; white-space: nowrap;
+  font: 600 0.66rem var(--font-ui); letter-spacing: 0.24em; text-transform: uppercase;
+  padding: 0.5rem 0.9rem; border-radius: 999px; background: var(--ivory); border: 1px solid var(--champ);
+  opacity: 0; transition: opacity 0.4s, translate 0.4s;
+}
+.sc__open:hover .sc__shadow { transform: translateY(14px) scale(1.18); opacity: 0.8; }
+.sc__open:hover .sc__card .invite { filter: brightness(1.04) saturate(1.04); }
+.sc__open:hover .sc__hint, .sc__open:focus-visible .sc__hint { opacity: 1; translate: -50% -4px; }
+@media (hover: none) { .sc__hint { opacity: 1; } } /* touch: always show the affordance */
+
+.sc__caption { margin-top: 1.4rem; font-size: 0.9rem; color: var(--muted); display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.6rem; }
+.sc__mono { font: italic 500 1.25rem var(--font-display); color: var(--ink-d); }
+.sc__palette { display: inline-flex; gap: 4px; margin-left: auto; }
+.sc__palette i { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgb(42 36 32 / 0.2); }
+
+/* ---------- Opened invitation ---------- */
+.op { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 24px; }
+.op__backdrop { position: absolute; inset: 0; background: rgb(245 240 231 / 0.95); }
+.op__close {
+  position: absolute; top: 20px; right: 24px; z-index: 2;
+  font: 600 0.75rem var(--font-ui); letter-spacing: 0.2em; text-transform: uppercase;
+  background: none; border: 1px solid var(--line); border-radius: 999px; padding: 0.6rem 1rem; color: var(--ink-d); cursor: pointer;
+}
+.op__stage { position: relative; display: flex; flex-direction: column; align-items: center; gap: 1.6rem; }
+.op__sheet { position: relative; width: min(400px, 74vw, calc(70svh * 5 / 7)); aspect-ratio: 5 / 7; perspective: 1600px; }
+.op__inner {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.7rem;
+  padding: 12% 10%; text-align: center;
+  background: #fbf8f3 url("/assets/wedding/textures/paper-ivory.webp") 0 0 / 256px;
+  border: 1px solid var(--op-line); outline: 1px solid var(--op-line); outline-offset: -10px;
+  box-shadow: 0 40px 70px -40px rgb(42 36 32 / 0.5);
+  color: var(--op-ink);
+}
+.op__inner p { margin: 0; }
+.op__blessing { font: 500 0.95rem var(--font-display); letter-spacing: 0.06em; color: var(--op-accent); }
+.op__small { font: 600 0.66rem var(--font-ui); letter-spacing: 0.24em; text-transform: uppercase; color: var(--muted); }
+.op__line { font: italic 400 1.05rem/1.4 var(--font-display); max-width: 24ch; }
+.op__names { margin: 0.3rem 0; font: italic 300 clamp(2rem, 5vw, 2.8rem)/1.05 var(--font-display); color: var(--op-accent); }
+.op__names span { color: var(--op-line); }
+.op__date { font: 600 0.8rem var(--font-ui); letter-spacing: 0.3em; }
+.op__style { margin-top: 1rem !important; }
+
+.op__cover { position: absolute; top: 0; bottom: 0; width: 50%; transform-style: preserve-3d; }
+.op__cover--l { left: 0; transform-origin: left center; }
+.op__cover--r { right: 0; transform-origin: right center; }
+.op__face { position: absolute; inset: 0; backface-visibility: hidden; display: grid; place-items: center; }
+.op__face--front { background: var(--op-cover) url("/assets/wedding/textures/paper-card.webp") 0 0 / 256px; background-blend-mode: multiply; border: 1px solid var(--op-line); }
+.op__cover--l .op__face--front { border-right-width: 0.5px; }
+.op__face--front span { font: italic 300 clamp(3.5rem, 10vw, 5.5rem) var(--font-display); color: var(--op-line); }
+.op__face--back { transform: rotateY(180deg); background: #f3ede3 url("/assets/wedding/textures/paper-ivory.webp") 0 0 / 256px; border: 1px solid rgb(42 36 32 / 0.12); }
+.op__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem; }
+
+.op--royal { --op-cover: #5e1a24; --op-line: #c9a86a; --op-accent: #5e1a24; --op-ink: var(--ink-d); }
+.op--floral { --op-cover: #ecd7ce; --op-line: #8a9a82; --op-accent: #66775f; --op-ink: var(--ink-d); }
+.op--minimal { --op-cover: #2a2420; --op-line: #d9d0c3; --op-accent: #2a2420; --op-ink: var(--ink-d); }
+.op--minimal .op__face--front { background-blend-mode: normal; background-image: none; }
+
+@media (max-width: 860px) {
+  .sc__item--royal { translate: none; }
+}
+@media (max-width: 720px) {
+  .sc__row { grid-template-columns: minmax(0, 1fr); max-width: 320px; gap: 56px; }
+}
